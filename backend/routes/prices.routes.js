@@ -16,4 +16,6 @@ router.get("/", (req, res) => {
 
 // CREATE
 
+router.post("/", (req, res) => {});
+
 module.exports = router;

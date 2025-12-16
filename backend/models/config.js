@@ -16,7 +16,12 @@ db.serialize(() => {
     main_price INTEGER NOT NULL
   )`);
 
-  db.run(`PRAGMA foreign_keys = ON`);
+  db.run(`PRAGMA foreign_keys = ON`); // включается защита
+  // service_id - внешний ключ ссылается на id в таблице services
+  //
+  // ON DELETE CASCADE - каскадное удаление
+  // 1. DELETE FROM services WHERE id = 3;
+  // 2. SQLite автоматически: DELETE FROM prices WHERE service_id = 3;
 
   db.run(`CREATE TABLE IF NOT EXISTS prices (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
