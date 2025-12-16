@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const requestLogger = require("./middleware/logger");
 const servicesRouter = require("./routes/services.routes");
+const pricesRouter = require("./routes/prices.routes");
 
 const app = express();
 const port = process.env.PORT;
@@ -11,6 +12,7 @@ app.use(express.json()); // для обработки json запросов с �
 app.use(requestLogger);
 
 app.use("/api/services", servicesRouter);
+app.use("/api/prices", pricesRouter);
 
 app.get("/", (req, res) => {
   res.send({ name: "Мастер на час", description: "Служба бытового сервиса" });

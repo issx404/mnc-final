@@ -3,6 +3,8 @@ const router = express.Router();
 
 const db = require("../models/config"); // уже открытая
 
+// READ
+
 router.get("/", (req, res) => {
   db.all("SELECT * FROM services", (err, rows) => {
     if (err) {
@@ -13,14 +15,19 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:url", (req, res) => {
-  let service = services.find((service) => service.url === req.params.url);
-  if (!service) {
-    return res.status(404).json({ message: "Услуга не найдена" });
-  }
-  res.json(service);
+  db.get(
+    `SELECT * FROM services WHERE url = ?`,
+    [req.params.url],
+    (err, row) => {
+      if (err || !row) {
+        return res.status(404).json({ message: "Нет такой услуги" });
+      }
+      res.json(row);
+    }
+  );
 });
 
-// POST асинхрон
+// CREATE асинхрон
 
 router.post("/", (req, res) => {
   const { url, title, description, main_price } = req.body;
@@ -55,6 +62,58 @@ router.post("/", (req, res) => {
       }
     );
   });
+});
+
+// UPDATE
+router.patch("/:url", (req, res) => {
+  const updates = {};
+
+  if (req.body.title !== undefined) updates.title = req.body.title;
+  if (req.body.description !== undefined)
+    updates.description = req.body.description;
+  if (req.body.main_price !== undefined)
+    updates.main_price = req.body.main_price;
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ message: "Нет данных для обновления" });
+  }
+
+  // мутим строку для sql
+  const setClause = Object.keys(updates)
+    .map((key) => `${key} = ?`)
+    .join(", ");
+
+  // мутим массив значений
+  const values = Object.values(updates);
+  values.push(req.params.url);
+
+  // SQL = `UPDATE services SET ${setClause} WHERE url = ?` ↓
+  // SQL = "UPDATE services SET title = ?, main_price = ? WHERE url = ?"
+
+  db.run(`UPDATE services SET ${setClause} WHERE url = ?`, values, (err) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ message: "Услуга не найдена" });
+    }
+    res.status(200).json({ message: "Обновлено!" });
+  });
+});
+
+// DELETE
+router.delete("/:url", (req, res) => {
+  db.run(
+    "DELETE FROM services WHERE url = ?",
+    [req.params.url],
+    function (err) {
+      if (err) return res.status(500).json({ message: err.message });
+      if (this.changes === 0) {
+        return res.status(404).json({ message: "Услуга не найдена" });
+      }
+      res.status(200).json({ message: "Услуга удалена" });
+    }
+  );
 });
 
 module.exports = router;
