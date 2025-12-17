@@ -9,6 +9,25 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 const port = process.env.PORT;
+// безопасность
+const cors = require("cors");
+app.use(
+  cors({
+    origin: ["http://localhost:5173"], // фронт
+    credentials: true, // cookie
+  })
+);
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 100, // 100 запросов с IP
+  message: { message: "Слишком много запросов" },
+});
+const helmet = require("helmet");
+app.use(helmet()); // защита от XSS, кликджекинга
+
+//
+app.use(limiter);
 app.use(cookieParser());
 app.use(express.json()); // для обработки json запросов с фронта через req.body
 // подключаем middleware
