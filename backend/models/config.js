@@ -49,6 +49,18 @@ db.serialize(() => {
   password_hash TEXT NOT NULL, 
   role TEXT DEFAULT 'admin'
   );`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS zayavki (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  client TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  address TEXT NOT NULL,
+  service_id INTEGER,
+  commentary TEXT,
+  status BOOLEAN DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (service_id) REFERENCES services(id)
+  )`);
 });
 
 module.exports = db;

@@ -5,6 +5,7 @@ const servicesRouter = require("./routes/services.routes");
 const pricesRouter = require("./routes/prices.routes");
 const contactsRouter = require("./routes/contacts.routes");
 const authRouter = require("./routes/auth.routes");
+const zayavkiRouter = require("./routes/zayavki.routes");
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -36,6 +37,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/services", servicesRouter);
 app.use("/api/prices", pricesRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/zayavki", zayavkiRouter);
 
 app.get("/", (req, res) => {
   res.send({ name: "Мастер на час", description: "Служба бытового сервиса" });
