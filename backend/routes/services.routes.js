@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../models/config"); // уже открытая
+const { authMiddleware, adminMiddleware } = require("../middleware/auth");
 
 // READ
 
@@ -29,7 +30,7 @@ router.get("/:url", (req, res) => {
 
 // CREATE асинхрон
 
-router.post("/", (req, res) => {
+router.post("/", authMiddleware, adminMiddleware, (req, res) => {
   const { url, title, description, main_price } = req.body;
   // типо валидация лол
   if (!url || !title || !description || !main_price) {
@@ -65,7 +66,7 @@ router.post("/", (req, res) => {
 });
 
 // UPDATE
-router.patch("/:url", (req, res) => {
+router.patch("/:url", authMiddleware, adminMiddleware, (req, res) => {
   const updates = {};
 
   if (req.body.title !== undefined) updates.title = req.body.title;
@@ -102,7 +103,7 @@ router.patch("/:url", (req, res) => {
 });
 
 // DELETE
-router.delete("/:url", (req, res) => {
+router.delete("/:url", authMiddleware, adminMiddleware, (req, res) => {
   db.run(
     "DELETE FROM services WHERE url = ?",
     [req.params.url],

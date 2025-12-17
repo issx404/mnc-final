@@ -32,6 +32,23 @@ db.serialize(() => {
     image_url TEXT,
     FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
   )`);
+
+  db.run(`CREATE TABLE IF NOT EXISTS contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    phone TEXT,
+    telegram TEXT,
+    whatsapp TEXT,
+    address TEXT,
+    map_url TEXT
+  )`);
+
+  //хэш bcrypt + role user/admin
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL, 
+  role TEXT DEFAULT 'admin'
+  );`);
 });
 
 module.exports = db;
