@@ -1,5 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const helmet = require("helmet");
+const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 const requestLogger = require("./middleware/logger");
 const servicesRouter = require("./routes/services.routes");
 const pricesRouter = require("./routes/prices.routes");
@@ -10,22 +13,21 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 const port = process.env.PORT;
+
 // безопасность
-const cors = require("cors");
+app.use(helmet()); // защита от XSS, кликджекинга
 app.use(
   cors({
-    origin: ["http://localhost:5173"], // фронт
-    credentials: true, // cookie
+    origin: process.env.FRONTEND_URL?.split(",") || ["http://localhost:5173"],
+    credentials: true,
   })
 );
-const rateLimit = require("express-rate-limit");
+app.set("trust proxy", 1); // для HTTPS reverse proxy
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 минут
   max: 100, // 100 запросов с IP
   message: { message: "Слишком много запросов" },
 });
-const helmet = require("helmet");
-app.use(helmet()); // защита от XSS, кликджекинга
 
 //
 app.use(limiter);
