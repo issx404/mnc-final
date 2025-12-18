@@ -1,7 +1,7 @@
 # Backend
 
-Фреймворк: Express.js  
-Безопасность: CORS, HttpOnly JWT Cookie, bcrypt пароли, Rate Limit, helmet, Подготовленные запросы
+**Фреймворк:** Express.js  
+**Безопасность:** CORS, HttpOnly JWT Cookie, bcrypt пароли, Rate Limit, helmet, Подготовленные запросы
 
 ## Авторизация
 
@@ -9,7 +9,7 @@
 
 ```json
 {
-  "username": "evgeniy",
+  "username": "логин",
   "password": "пароль"
 }
 ```
@@ -170,3 +170,63 @@ Cookie: token (HttpOnly, 15 мин)
 ## Цены
 
 **GET /api/prices (публичный)**
+Ответ 200:
+
+```json
+[
+  {
+    "id": 1,
+    "service_id": 2,
+    "title": "Монтаж плинтуса",
+    "description": "Легко и быстро!",
+    "price": 1000,
+    "image_url": "/public/images/plintus.jpg"
+  },
+  {
+    "id": 2,
+    "service_id": 2,
+    "title": "Установка карниза",
+    "description": "Легко и быстро!",
+    "price": 1000,
+    "image_url": "/public/images/karniz.jpg"
+  }
+]
+```
+
+**POST /api/prices (требуется авторизация + админ роль)**
+
+```json
+{
+  "service_id": "2",
+  "title": "Установка карниза",
+  "description": "Легко и быстро!",
+  "price": "1000",
+  "image_url": "/public/images/karniz.jpg"
+}
+```
+
+Ответ 200:
+
+```json
+{
+  "message": "Успешно добавлен прайс, id = 2"
+}
+```
+
+**PATCH /api/prices/2 (требуется авторизация + админ роль)**  
+Доступные поля для обновления: service_id, title, description, price, image_url
+
+```json
+{
+  "description": "Быстро!",
+  "price": 7777
+}
+```
+
+Ответ 200:
+
+```json
+{
+  "message": "Позиция прайса обновлена"
+}
+```
