@@ -1,6 +1,6 @@
 # Backend
 
-Фреймворк: Express.js
+Фреймворк: Express.js  
 Безопасность: CORS, HttpOnly JWT Cookie, bcrypt пароли, Rate Limit, helmet, Подготовленные запросы
 
 ## Авторизация
