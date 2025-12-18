@@ -5,6 +5,23 @@
 
 ## Авторизация
 
+**POST /api/auth/register**
+
+```json
+{
+  "username": "evgeniy",
+  "password": "пароль"
+}
+```
+
+Ответ 200:
+
+```json
+{
+  "message": "Пользователь создан"
+}
+```
+
 HttpOnly Cookie
 
 **POST /api/auth/login**
