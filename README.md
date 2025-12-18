@@ -7,7 +7,7 @@
 
 HttpOnly Cookie
 
-POST /api/auth/login:
+**POST /api/auth/login**
 
 ```json
 {
@@ -30,7 +30,7 @@ POST /api/auth/login:
 
 Cookie: token (HttpOnly, 15 мин)
 
-POST /api/auth/logout
+**POST /api/auth/logout**
 
 ```json
 {}
@@ -40,7 +40,7 @@ POST /api/auth/logout
 
 ## Услуги
 
-** GET /api/services (публичный) **
+**GET /api/services (публичный)**
 
 Ответ 200:
 
@@ -84,7 +84,7 @@ POST /api/auth/logout
 ]
 ```
 
-** GET /api/services/electrica (публичный) **
+**GET /api/services/electrica (публичный)**
 
 Ответ 200:
 
@@ -98,7 +98,7 @@ POST /api/auth/logout
 }
 ```
 
-** POST /api/services (требуется авторизация + админ роль) **
+**POST /api/services (требуется авторизация + админ роль)**
 
 ```json
 {
@@ -117,7 +117,7 @@ POST /api/auth/logout
 }
 ```
 
-** PATCH /api/services/electrica (требуется авторизация + админ роль) **
+**PATCH /api/services/electrica (требуется авторизация + админ роль)**
 Доступные поля для обновления: title, description, main_price
 
 ```json
@@ -134,7 +134,7 @@ POST /api/auth/logout
 }
 ```
 
-** DELETE /api/services/electrica (требуется авторизация + админ роль) **
+**DELETE /api/services/electrica (требуется авторизация + админ роль)**
 
 ```json
 {
@@ -152,4 +152,4 @@ POST /api/auth/logout
 
 ## Цены
 
-GET /api/prices (публичный)
+**GET /api/prices (публичный)**
