@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../models/config");
 const { authMiddleware } = require("../middleware/auth");
 
-router.post("/", authMiddleware, (req, res) => {
+router.post("/", (req, res) => {
   const { client, phone, address, service_title, commentary } = req.body;
 
   // валидация телефона
@@ -100,6 +100,26 @@ router.patch("/:id/status", authMiddleware, (req, res) => {
       res.json({ message: "Статус обновлён" });
     }
   );
+});
+
+// удалить заявку (только админ)
+router.delete("/:id", authMiddleware, (req, res) => {
+  const { id } = req.params;
+  const { role } = req.user;
+
+  if (role !== "admin") {
+    return res.status(403).json({ error: "Только для админа" });
+  }
+
+  db.run("DELETE FROM zayavki WHERE id = ?", [id], function (err) {
+    if (err) {
+      return res.status(500).json({ error: "Ошибка удаления заявки" });
+    }
+    if (this.changes === 0) {
+      return res.status(404).json({ error: "Заявка не найдена" });
+    }
+    res.json({ message: "Заявка удалена" });
+  });
 });
 
 module.exports = router;
