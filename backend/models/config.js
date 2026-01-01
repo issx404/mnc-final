@@ -13,7 +13,8 @@ db.serialize(() => {
     url TEXT UNIQUE NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
-    main_price INTEGER NOT NULL
+    main_price INTEGER NOT NULL,
+    image_url TEXT DEFAULT 'default-service.jpg'
   )`);
 
   db.run(`PRAGMA foreign_keys = ON`); // включается защита

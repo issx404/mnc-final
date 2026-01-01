@@ -68,35 +68,40 @@ Cookie: token (HttpOnly, 15 мин)
     "url": "tehnika",
     "title": "Установка техники",
     "description": "Стиральные машины, посудомойки, духовые шкафы, варочные панели, телевизоры. Полная настройка и проверка.",
-    "main_price": 1994
+    "main_price": 1994,
+    "image_url": "uploads/1767269157342-671881703.png"
   },
   {
     "id": 2,
     "url": "remont",
     "title": "Мелкий бытовой ремонт",
     "description": "Монтаж плинтуса, укладка порожков, установка карниза, навес картин, зеркал",
-    "main_price": 1994
+    "main_price": 1994,
+    "image_url": "uploads/1767269157342-671881703.png"
   },
   {
     "id": 3,
     "url": "santehnika",
     "title": "Сантехника",
     "description": "Устранение засора, протечки, установка унитаза, замена подводки, смесителя. Обслуживание фильтров.",
-    "main_price": 1994
+    "main_price": 1994,
+    "image_url": "uploads/1767269157342-671881703.png"
   },
   {
     "id": 4,
     "url": "mebel",
     "title": "Сборка мебели",
     "description": "Шкафы, кровати, кухни, офисная мебель. Гарантия качества сборки.",
-    "main_price": 1994
+    "main_price": 1994,
+    "image_url": "uploads/1767269157342-671881703.png"
   },
   {
     "id": 5,
     "url": "electrica",
     "title": "Электрика",
     "description": "Замена розеток, выключателей, проводка, освещение. Безопасно и быстро.",
-    "main_price": 1994
+    "main_price": 1994,
+    "image_url": "uploads/1767269157342-671881703.png"
   }
 ]
 ```
@@ -111,36 +116,37 @@ Cookie: token (HttpOnly, 15 мин)
   "url": "electrica",
   "title": "Электрика",
   "description": "Замена розеток, выключателей, проводка, освещение. Безопасно и быстро.",
-  "main_price": 1994
+  "main_price": 1994,
+  "image_url": "uploads/1767269157342-671881703.png"
 }
 ```
 
-**POST /api/services (требуется авторизация + админ роль)**
+**POST /api/services (требуется авторизация + админ роль) ожидает multipart/form-data**
 
-```json
-{
-  "url": "tehnika",
-  "title": "Установка техники",
-  "description": "Стиральные машины, посудомойки, духовые шкафы, варочные панели, телевизоры. Полная настройка и проверка.",
-  "main_price": "1994"
-}
+```multipart/form-data
+
+  url: tehnika,
+  title: Установка техники,
+  description: Стиральные машины, посудомойки, духовые шкафы, варочные панели, телевизоры. Полная настройка и проверка.,
+  main_price: 1994,
+  image_url": uploads/1767269157342-671881703.png (file)
+
 ```
 
 Ответ 200:
 
 ```json
 {
-  "message": "Услуга \"Установка техники\" успешно добавлена"
+  "message": "Услуга \"Установка техники\" успешно добавлена",
+  "image_url": "uploads/1767269157342-671881703.png"
 }
 ```
 
-**PATCH /api/services/electrica (требуется авторизация + админ роль)**
-Доступные поля для обновления: title, description, main_price
+**PATCH /api/services/electrica (требуется авторизация + админ роль) через body -> form-data**
+Доступные поля для обновления: title, description, main_price, image
 
-```json
-{
-  "main_price": 2222
-}
+```form-data
+  image: Photo2.jpg (file)
 ```
 
 Ответ 200:
