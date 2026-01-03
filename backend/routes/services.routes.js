@@ -57,7 +57,7 @@ router.post(
       // Путь к фото или дефолт
       const image_url = req.file
         ? `uploads/${req.file.filename}`
-        : "default-service.jpg";
+        : "uploads/default-service.jpg";
 
       // INSERT с image_url
       db.run(

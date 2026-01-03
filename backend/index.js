@@ -75,7 +75,21 @@ app.post("/upload-photo", upload.single("photo"), (req, res) => {
 app.use(requestLogger);
 app.use("/api/auth", authRouter);
 app.use("/api/services", servicesRouter);
-app.use("/uploads", express.static("uploads")); // для отдачи фото по /uploads/filename.jpg
+app.use((req, res, next) => {
+  if (
+    req.path.startsWith("/uploads") ||
+    req.path.includes(".jpg") ||
+    req.path.includes(".png")
+  ) {
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+    res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+    res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  }
+  next();
+});
+
+// ПОТОМ статические файлы
+app.use("/uploads", express.static("uploads"));
 app.use("/api/prices", pricesRouter);
 app.use("/api/contacts", contactsRouter);
 app.use("/api/zayavki", zayavkiRouter);

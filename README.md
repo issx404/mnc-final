@@ -200,8 +200,7 @@ Cookie: token (HttpOnly, 15 мин)
   "service_id": "2",
   "title": "Установка карниза",
   "description": "Легко и быстро!",
-  "price": "1000",
-  "image_url": "/public/images/karniz.jpg"
+  "price": "1000"
 }
 ```
 
@@ -214,12 +213,11 @@ Cookie: token (HttpOnly, 15 мин)
 ```
 
 **PATCH /api/prices/2 (требуется авторизация + админ роль)**  
-Доступные поля для обновления: service_id, title, description, price, image_url
+Доступные поля для обновления: service_id, title, description, price
 
 ```json
 {
-  "description": "Быстро!",
-  "price": 7777
+  "description": "Быстро!"
 }
 ```
 

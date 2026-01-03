@@ -2,9 +2,16 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models/config");
 const { authMiddleware } = require("../middleware/auth");
+const dayjs = require("dayjs");
+require("dayjs/plugin/timezone");
+require("dayjs/plugin/utc");
+dayjs.extend(require("dayjs/plugin/timezone"));
+dayjs.extend(require("dayjs/plugin/utc"));
 
 router.post("/", (req, res) => {
   const { client, phone, address, service_title, commentary } = req.body;
+
+  const now = dayjs().tz("Asia/Yakutsk").format("YYYY-MM-DD HH:mm:ss");
 
   // валидация телефона
   if (!phone.match(/^\+7\d{10}$/)) {
@@ -13,19 +20,16 @@ router.post("/", (req, res) => {
       .json({ error: "Неверный формат телефона (+79991234567)" });
   }
 
-  // если "Другое" — service_id = NULL
+  // "Другое"
   if (service_title === "Другое") {
     db.run(
-      `INSERT INTO zayavki (client, phone, address, service_id, commentary) 
-       VALUES (?, ?, ?, ?, ?)`,
-      [client, phone, address, null, commentary || "Другое"],
+      `INSERT INTO zayavki (client, phone, address, service_id, commentary, created_at) 
+       VALUES (?, ?, ?, ?, ?, ?)`, // 🔥 + created_at
+      [client, phone, address, null, commentary || "Другое", now], // 🔥 + now
       function (err) {
         if (err)
           return res.status(500).json({ error: "Ошибка создания заявки" });
-        res.json({
-          id: this.lastID,
-          message: "Заявка создана!",
-        });
+        res.json({ id: this.lastID, message: "Заявка создана!" });
       }
     );
     return;
@@ -39,18 +43,14 @@ router.post("/", (req, res) => {
       if (err) return res.status(500).json({ error: "Ошибка БД" });
       if (!service) return res.status(400).json({ error: "Услуга не найдена" });
 
-      // создаём заявку с service_id
       db.run(
-        `INSERT INTO zayavki (client, phone, address, service_id, commentary) 
-         VALUES (?, ?, ?, ?, ?)`,
-        [client, phone, address, service.id, commentary],
+        `INSERT INTO zayavki (client, phone, address, service_id, commentary, created_at) 
+       VALUES (?, ?, ?, ?, ?, ?)`, // 🔥 + created_at
+        [client, phone, address, service.id, commentary, now], // 🔥 + now
         function (err) {
           if (err)
             return res.status(500).json({ error: "Ошибка создания заявки" });
-          res.json({
-            id: this.lastID,
-            message: "Заявка создана!",
-          });
+          res.json({ id: this.lastID, message: "Заявка создана!" });
         }
       );
     }

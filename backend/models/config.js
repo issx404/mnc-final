@@ -14,7 +14,7 @@ db.serialize(() => {
     title TEXT NOT NULL,
     description TEXT,
     main_price INTEGER NOT NULL,
-    image_url TEXT DEFAULT 'default-service.jpg'
+    image_url TEXT DEFAULT '/uploads/default-service.jpg'
   )`);
 
   db.run(`PRAGMA foreign_keys = ON`); // включается защита
@@ -30,7 +30,6 @@ db.serialize(() => {
     title TEXT NOT NULL,
     description TEXT,
     price INTEGER NOT NULL,
-    image_url TEXT,
     FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE CASCADE
   )`);
 
@@ -59,7 +58,7 @@ db.serialize(() => {
   service_id INTEGER,
   commentary TEXT,
   status BOOLEAN DEFAULT 0,
-  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  created_at TEXT NOT NULL,
   FOREIGN KEY (service_id) REFERENCES services(id)
   )`);
 });

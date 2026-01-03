@@ -43,9 +43,9 @@ router.get("/:id", (req, res) => {
 // id, service_id, title, description, price, images_url
 // CREATE
 router.post("/", authMiddleware, adminMiddleware, (req, res) => {
-  const { service_id, title, description, price, image_url } = req.body;
+  const { service_id, title, description, price } = req.body;
 
-  if (!service_id || !title || !description || !price || !image_url) {
+  if (!service_id || !title || !description || !price) {
     return res
       .status(400)
       .json({ message: "Все поля обязательны к заполнению!" });
@@ -61,8 +61,8 @@ router.post("/", authMiddleware, adminMiddleware, (req, res) => {
         .json({ message: `Услуга ${title} уже существует!` });
     }
     db.run(
-      `INSERT INTO prices (service_id, title, description, price, image_url) VALUES (?,?,?,?,?)`,
-      [service_id, title, description, price, image_url],
+      `INSERT INTO prices (service_id, title, description, price) VALUES (?,?,?,?)`,
+      [service_id, title, description, price],
       function (err) {
         if (err) {
           return res
@@ -89,7 +89,6 @@ router.patch("/:id", authMiddleware, adminMiddleware, (req, res) => {
   if (req.body.description !== undefined)
     updates.description = req.body.description;
   if (req.body.price !== undefined) updates.price = req.body.price;
-  if (req.body.image_url !== undefined) updates.image_url = req.body.image_url;
 
   if (Object.keys(updates).length === 0) {
     return res.status(400).json({ message: "Нет данных для обновления" });
